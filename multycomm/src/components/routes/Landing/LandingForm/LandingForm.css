@@ -1,24 +1,23 @@
 
 
 .form-multycomm{
-    width:50%;
+    width:75%;
     margin: auto;
     border: 1px solid;
-    margin-top: 1vh;
+    margin-top: 0.5vh;
     border-color: rgb(189, 185, 180);
     border-radius: 10px;
-    padding: auto;
 }
 
 .form-heading{
-    margin-bottom: 3vh;
+    margin-bottom: 2.5vh;
 }
 
 .form-control{
-    width: 90%;
+    width: 95%;
     margin: auto;
 }
 
 .sbt-btn{
-    margin-top: 3vh;
+    margin-top: 1vh;
 }

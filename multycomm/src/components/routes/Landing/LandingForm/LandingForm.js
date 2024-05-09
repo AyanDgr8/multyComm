@@ -5,26 +5,20 @@ import axios from 'axios';
 import './LandingForm.css'; 
 
 const LandingForm = () => {
+    
+    const [submitStatus, setSubmitStatus] = useState(null);
     const [formData, setFormData] = useState({
+        userId:'',
         firstName: '',
         lastName: '',
         email: '',
         phone: '',
+        dob: '',
         address: '',
         state:'',
         zip:'',
-        gender: 'men',
+        gender: 'male',
     });
-
-    
-  
-    const [submitStatus, setSubmitStatus] = useState(null);
-
-    
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
 
 
     const handleSubmit = async (e) => {
@@ -33,12 +27,13 @@ const LandingForm = () => {
         // Validation checks
         if (!validateForm()) return;
     
-        const apiUrl = "https://snyllo-payment.onrender.com/user-details-bookform";
+        const apiUrl = "https://multycomm-backend.onrender.com/user-details-bookform";
     
         try {
         // Prepare request data
         const requestData = {
-            ...formData
+            ...formData,
+            selectedBodyParts: JSON.stringify(formData.selectedBodyParts)
         };
     
         // Submit the form data
@@ -54,14 +49,20 @@ const LandingForm = () => {
 
     // Function to validate form inputs
     const validateForm = () => {
-        const { firstName, lastName, email, phone, address, state, zip, gender } = formData;
+        const { userId, firstName, lastName, email, phone, dob, address, state, zip, gender } = formData;
+        const userRegex = /^[a-zA-Z0-9!@#$%^&*()-_+=]{6,}$/;
         const phoneRegex = /^\d{10}$/;
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         const zipRegex =  /^\d{6}$/;
         
-        if (!firstName || !lastName || !phone || !email || !address || !state || !zip || !gender) {
+        if (!userId || !dob || !firstName || !lastName || !phone || !email || !address || !state || !zip || !gender) {
         alert('Please fill in all the required fields');
         return false;
+        }
+
+        if (!userRegex.test(userId)) {
+            alert('Please enter a valid userId with at least 6 characters consisting of letters, numbers, and special characters (!@#$%^&*()-_+=)');
+            return false;
         }
     
         if (!phoneRegex.test(phone)) {
@@ -105,16 +106,30 @@ const LandingForm = () => {
     
     const resetForm = () => {
         setFormData({
+            userId: '',
             firstName: '',
             lastName: '',
             email: '',
             phone: '',
+            dob:'',
             address: '',
             state:'',
             zip:'',
-            gender: 'men',
+            gender: 'male',
         });
     }; 
+
+    
+
+    
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        
+        setFormData({ ...formData, 
+            [name]: value,
+        });
+    };
 
     useEffect(() => {
       if (submitStatus === 'success') {
@@ -133,11 +148,12 @@ const LandingForm = () => {
                 
                 <div className='form-heading'>
                     <div className='form-line1'>
-                        <h1>MultyComm Registration Form</h1>
+                        <h1>Registration</h1>
                     </div>
                 </div>
 
-                {/* ****** */}
+                {/* ******** */}
+            
 
                 <div class="row mb-4">
                     <div class="col">
@@ -182,12 +198,32 @@ const LandingForm = () => {
                 </div>
 
                 {/* ************ */}
-                <div data-mdb-input-init class="form-outline mb-4">
-                    <input type="text" id="form6Example5" class="form-control"     
-                        name="address" value={formData.address} onChange={handleChange}  required
-                    />
-                    <label class="form-label" for="form6Example5">Address</label>
-                </div>
+
+                
+
+                {/* ****** */}
+                <div class="row mb-4">
+
+                    <div class="col">
+                        <div data-mdb-input-init class="form-outline">
+                            <input type="text" id="form6Example1" class="form-control" 
+                                name="userId" value={formData.userId} onChange={handleChange}  required 
+                            />
+                            <label class="form-label" for="form6Example1">Username</label>
+                        </div>
+                    </div>
+
+                    
+                    <div class="col">
+                        <div data-mdb-input-init class="form-outline mb-4">
+                            <input type="text" id="form6Example5" class="form-control"     
+                                name="address" value={formData.address} onChange={handleChange}  required
+                            />
+                            <label class="form-label" for="form6Example5">Address</label>
+                        </div>
+                    </div>
+
+                </div>    
                 
                 {/* ********* */}
 
@@ -215,6 +251,7 @@ const LandingForm = () => {
 
                 {/********* */}
                 <div>
+                    <h4>Gender</h4>
                     <div className="form-check form-check-inline">
                         <input
                             className="form-check-input"
@@ -266,25 +303,25 @@ const LandingForm = () => {
                 {/* ***************** */}
 
 
-                <button data-mdb-ripple-init type="button" class="btn btn-primary btn-block mb-4 sbt-btn">Submit</button>
+                <button data-mdb-ripple-init type="submit" className="btn btn-primary btn-block mb-4 sbt-btn">Submit</button>
 
-
-            </form>
             
-            {submitStatus && (
-              <p className={submitStatus === 'success' ? 'success-message' : 'error-message'}>
                 {submitStatus && (
-                  (() => {
-                    if (submitStatus === 'success') {
-                      window.alert('Thank you for contacting us, we will be in touch shortly!');
-                    } else {
-                      window.alert('Please try again!');
-                    }
-                  })()
+                    <p className={submitStatus === 'success' ? 'success-message' : 'error-message'}>
+                        {submitStatus && (
+                        (() => {
+                            if (submitStatus === 'success') {
+                            window.alert('Thank you for contacting us, we will be in touch shortly!');
+                            } else {
+                            window.alert('Please try again!');
+                            }
+                        })()
+                        )}
+
+                    </p>
                 )}
 
-              </p>
-            )}
+            </form>
 
         </div>
     )
