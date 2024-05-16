@@ -23,6 +23,7 @@ const ForgotPassword = () => {
         // If the email exists, send the password reset email
         await sendPasswordReset(email);
         window.alert("Password reset email sent successfully!");
+
         // Clear the email field
         setEmail('');
       } else {
@@ -68,14 +69,17 @@ const ForgotPassword = () => {
               className="reset__textBox"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="E-mail Address"
+              placeholder="E-mail"
             />
           </div>
           
           <button onClick={handleResetPassword} data-mdb-ripple-init type="submit" className="btn btn-primary btn-block mb-4 sbtt-btn">Send OTP</button>
           
           <div>
-            Don't have an account? <Link to="/user-register" className="registerr-link">Register</Link> now.
+            Already a user?<Link to="/user-login" className="registerr-link">Login</Link> 
+          </div>
+          <div>
+            Don't have an account? <Link to="/user-register" className="registerr-link">Register</Link> 
           </div>
         </div>
       </div>

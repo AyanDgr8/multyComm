@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import './Login.css' ;
 import axios from "axios";
 import { Link } from "react-router-dom";
-// import { sendPasswordReset  } from "../../../../Firebase";
 
 const Login = () => { 
     const [alertMessage, setAlertMessage] = useState(null);

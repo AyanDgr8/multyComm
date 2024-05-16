@@ -373,15 +373,7 @@ const Register = () => {
                         Login
                     </Link>
                 </div>
-              
-
             
-                
-                {alertMessage && (
-                    <p className="error-message">
-                        {alertMessage}
-                    </p>
-                )}
 
             </form>
 
