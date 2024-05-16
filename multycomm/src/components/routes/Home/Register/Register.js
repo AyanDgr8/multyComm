@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import './Register.css'; 
 import axios from 'axios';
 import { Link, useNavigate } from "react-router-dom";
-// import { registerWithEmailAndPassword, signInWithGoogle  } from "../../../../Firebase";
+import { registerWithEmailAndPassword  } from "../../../../Firebase";
 
 
 const Register = () => {
@@ -42,14 +42,27 @@ const Register = () => {
 
             // Submit the form data
             await axios.post(apiUrl, requestData);
-            // await registerWithEmailAndPassword(formData.firstName, formData.email, formData.password);
             
-            console.log('Registration  successful');
+            console.log('Registration successful');
             setAlertMessage('User registered successfully!');
+            // Register user with Firebase backend
+            await registerWithFirebase();
             handleSubmissionSuccess();
         } catch (error) {
             console.error('Error submitting form:', error);
             handleSubmissionError(error);
+        }
+    };
+
+    // Function to register user with Firebase backend
+    const registerWithFirebase = async () => {
+        try {
+            const { firstName, email, password } = formData;
+            await registerWithEmailAndPassword(firstName, email, password);
+            console.log('User registered with Firebase');
+        } catch (error) {
+            console.error('Error registering user with Firebase:', error);
+            throw error; // Rethrow the error to handle it in the handleSubmit function
         }
     };
 

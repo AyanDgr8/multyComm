@@ -1,6 +1,5 @@
 // src/components/routes/Home/ForgotPassword/ForgotPassword.js
 
-
 import React, { useState } from "react";
 import './ForgotPassword.css'; 
 import axios from "axios";
@@ -9,13 +8,21 @@ import { sendPasswordReset } from "../../../../Firebase";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
+  const [isSending, setIsSending] = useState(false); // State to track reset link sending process
 
   const handleResetPassword = async () => {
     if (!email.trim()) {
       window.alert("Please fill in your email");
       return;
     }
+
+    // Prevent multiple submission
+    if (isSending) return;
+
     try {
+      // Start the reset link sending process
+      setIsSending(true);
+
       // Check if the entered email exists in the database
       const response = await axios.post('https://multycomm-backend.onrender.com/forgot-password', { email });
   
@@ -32,7 +39,10 @@ const ForgotPassword = () => {
       }
     } catch (error) {
       console.error("Error sending password reset email:", error);
-      window.alert("Email not found. Please enter a registered email.");
+      window.alert(error.message);
+    } finally {
+      // End the reset link sending process
+      setIsSending(false);
     }
   };
   
@@ -73,7 +83,15 @@ const ForgotPassword = () => {
             />
           </div>
           
-          <button onClick={handleResetPassword} data-mdb-ripple-init type="submit" className="btn btn-primary btn-block mb-4 sbtt-btn">Send OTP</button>
+          <button 
+            onClick={handleResetPassword} 
+            data-mdb-ripple-init 
+            type="submit" 
+            className="btn btn-primary btn-block mb-4 sbtt-btn"
+            disabled={isSending} // Disable button while sending
+          >
+            {isSending ? 'Sending...' : 'Send OTP'}
+          </button>
           
           <div>
             Already a user?<Link to="/user-login" className="registerr-link">Login</Link> 
@@ -83,6 +101,7 @@ const ForgotPassword = () => {
           </div>
         </div>
       </div>
+
     </div>
   );
 }
