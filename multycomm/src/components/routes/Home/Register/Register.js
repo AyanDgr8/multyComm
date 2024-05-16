@@ -1,14 +1,16 @@
-// /src/components/routes/Landing/Register/Register.js
+// /src/components/routes/Home/Register/Register.js
 
 import React, { useState, useEffect } from 'react';
 import './Register.css'; 
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+// import { registerWithEmailAndPassword, signInWithGoogle  } from "../../../../Firebase";
 
 
 const Register = () => {
+    const navigate = useNavigate(); 
     
-    const [submitStatus, setSubmitStatus] = useState(null);
+    const [alertMessage, setAlertMessage] = useState(null);
     const [formData, setFormData] = useState({
         username:'',
         password: '',
@@ -16,6 +18,8 @@ const Register = () => {
         lastName: '',
         email: '',
         phone: '',
+        gender:'male',
+        dob:'',
     });
 
     const handleSubmit = async (e) => {
@@ -23,6 +27,10 @@ const Register = () => {
 
         // Validation checks
         if (!validateForm()) return;
+
+        // Disable the submit button to prevent multiple submissions
+        e.target.querySelector('button[type="submit"]').disabled = true;
+    
 
         // If validations pass, submit the form data
         const apiUrl = "https://multycomm-backend.onrender.com/user-register";
@@ -34,8 +42,10 @@ const Register = () => {
 
             // Submit the form data
             await axios.post(apiUrl, requestData);
-            console.log('Submission successful');
-            setSubmitStatus('success');
+            // await registerWithEmailAndPassword(formData.firstName, formData.email, formData.password);
+            
+            console.log('Registration  successful');
+            setAlertMessage('User registered successfully!');
             handleSubmissionSuccess();
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -45,25 +55,25 @@ const Register = () => {
 
     // Function to validate form inputs
     const validateForm = () => {
-        const { username, firstName, lastName, email, password, phone } = formData;
+        const { username, firstName, lastName, email, password, phone, dob } = formData;
         const phoneRegex = /^\d{10}$/;
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         // Check if any required field is empty
-        if (!username || !password || !firstName || !lastName || !phone || !email) {
-            alert('Please fill in all the required fields');
+        if (!username || !password || !firstName || !lastName || !phone || !email || !dob) {
+            setAlertMessage('Please fill in all the required fields');
             return false;
         }
 
         // Validate phone number
         if (!phoneRegex.test(phone)) {
-            alert('Please enter a valid phone number');
+            setAlertMessage('Please enter a valid phone number');
             return false;
         }
 
         // Validate email address
         if (!emailRegex.test(email)) {
-            alert('Please enter a valid email address');
+            setAlertMessage('Please enter a valid email address');
             return false;
         }
 
@@ -73,32 +83,63 @@ const Register = () => {
             return false;
         }
 
+        // Validate date of birth
+        const today = new Date();
+        const dobDate = new Date(dob);
+        const minAgeDate = new Date(today.getFullYear() - 90, today.getMonth(), today.getDate()); 
+        const maxAgeDate = new Date(today.getFullYear() - 8, today.getMonth(), today.getDate()); 
+    
+        if (dobDate > today || dobDate < minAgeDate || dobDate > maxAgeDate) {
+            setAlertMessage('Please enter a valid date of birth between 8 and 90 years from today');
+            return false;
+        }
+    
         // If all validations pass, return true
         return true;
+    
     };
 
 
     // Function to handle successful form submission
     const handleSubmissionSuccess = () => {
-        setSubmitStatus('success');
+        // Reset form data
         resetForm();
+
+        // Redirect to login page after alert is dismissed
+        setTimeout(() => {
+            navigate("/user-login");
+        }, 500); 
     };
 
 
 
-    // *************
+    
 
     // Function to handle form submission error
-    
+
 
     const handleSubmissionError = (error) => {
         if (error.response && error.response.data && error.response.data.message) {
-            window.alert(error.response.data.message);
+            setAlertMessage(error.response.data.message); 
         } else {
-            window.alert('An error occurred. Please try again later.');
+            setAlertMessage('An error occurred. Please try again later.'); 
         }
-        setSubmitStatus('error');
     };
+
+    // Function to reset the form
+    const resetForm = () => {
+        setFormData({
+            username: '',
+            password: '',
+            firstName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+            gender: 'male',
+            dob: '',
+        });
+    };
+
     
 
 
@@ -106,32 +147,34 @@ const Register = () => {
     // **************
     
 
-
-    const resetForm = () => {
-        setFormData({
-            username:'',
-            password: '',
-            firstName: '',
-            lastName: '',
-            email: '',
-            phone: '',
-        });
-    }; 
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
+    
+
+    // const handleRegisterWithGoogle = async () => {
+    //     try {
+    //         await signInWithGoogle();
+    //         console.log('Registration with Google successful');
+    //         setAlertMessage('Registered successfully with Google!');
+    //         handleSubmissionSuccess();
+    //     } catch (error) {
+    //         console.error('Error registering with Google:', error);
+    //         setAlertMessage('An error occurred while registering with Google. Please try again later.');
+    //     }
+    // };
 
     useEffect(() => {
-        if (submitStatus === 'success') {
-            const resetFormTimeout = setTimeout(() => {
-                setSubmitStatus(null);
-                resetForm();
-            }, 4000);
-            return () => clearTimeout(resetFormTimeout);
+        if (alertMessage) {
+            // Show alert
+            alert(alertMessage);
+
+            // Clear alert message
+            setAlertMessage(null);
         }
-    }, [submitStatus]);
+    }, [alertMessage]);
+    
     
 
     return(
@@ -171,9 +214,9 @@ const Register = () => {
 
                 {/* ******** */}
 
-                <div class="row mb-4 mob">
+                <div className="row mb-4 mob">
 
-                  <div class="col">
+                  <div className="col">
                       <div data-mdb-input-init className="form-outline">
                           <input type="text" id="form6Example3" className="form-control inputs" 
                               name="username" value={formData.username} onChange={handleChange}
@@ -185,7 +228,7 @@ const Register = () => {
 
                   
 
-                  <div class="col">
+                  <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <input type="text" id="form6Example6" className="form-control inputs" 
                         name="password" value={formData.password} onChange={handleChange}  
@@ -200,8 +243,8 @@ const Register = () => {
                 {/* ************ */}
             
 
-                <div class="row mb-4 mob">
-                    <div class="col">
+                <div className="row mb-4 mob">
+                    <div className="col">
                         <div data-mdb-input-init className="form-outline">
                             <input type="text" id="form6Example1" className="form-control inputs" 
                                 name="firstName" value={formData.firstName} onChange={handleChange}  
@@ -210,7 +253,7 @@ const Register = () => {
                             {/* <label class="form-label" for="form6Example1">First name</label> */}
                         </div>
                     </div>
-                    <div class="col">
+                    <div className="col">
                         <div data-mdb-input-init className="form-outline">
                             <input type="text" id="form6Example2" className="form-control inputs" 
                                 name="lastName" value={formData.lastName} onChange={handleChange} 
@@ -224,9 +267,9 @@ const Register = () => {
 
                 {/* ***************** */}
 
-                <div class="row mb-4 mob">
+                <div className="row mb-4 mob"> 
 
-                  <div class="col">
+                  <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <input type="email" id="form6Example5" className="form-control inputs" 
                         name="email" value={formData.email} onChange={handleChange}
@@ -237,7 +280,7 @@ const Register = () => {
                   </div>
                   
 
-                  <div class="col">
+                  <div className="col">
                     <div data-mdb-input-init className="form-outline">
                         <input type="number" id="form6Example4" className="form-control inputs"     
                             name="phone" value={formData.phone} onChange={handleChange}
@@ -249,35 +292,94 @@ const Register = () => {
 
                 </div>
 
-                <button data-mdb-ripple-init type="submit" className="btn btn-primary btn-block mb-4 sbt-btn ">Submit</button>
+
+                {/* ***************** */}
+                <div className="row mb-4 mob">
+                    
+
+                    <div className="col">
+                        <div data-mdb-input-init className="form-outline">
+                            <input
+                                type="date"
+                                id="dob"
+                                className="form-control inputs"
+                                name="dob"
+                                value={formData.dob}
+                                onChange={handleChange}
+                                placeholder="Date of Birth"
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col gender-column">
+                        {/* <label htmlFor="gender" className='gender-word'>Gender:</label> */}
+                        <div data-mdb-input-init className="form-outline rd-btn">
+                            <input
+                                type="radio"
+                                id="male"
+                                name="gender"
+                                value="male"
+                                className='rd-btns'
+                                checked={formData.gender === 'male'}
+                                onChange={handleChange}
+                                required
+                            />
+                            <label htmlFor="male">Male</label>
+
+                            <input
+                                type="radio"
+                                id="female"
+                                name="gender"
+                                value="female"
+                                className='rd-btns'
+                                checked={formData.gender === 'female'}
+                                onChange={handleChange}
+                                required
+                            />
+                            <label htmlFor="female">Female</label>
+
+                            <input
+                                type="radio"
+                                id="other"
+                                name="gender"
+                                value="other"
+                                className='rd-btns'
+                                checked={formData.gender === 'other'}
+                                onChange={handleChange}
+                                required
+                            />
+                            <label htmlFor="other">Other</label>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+                <button data-mdb-ripple-init type="submit" className="btn btn-primary btn-block mb-4 sbt-btn ">Register</button>
                 
                 
 
                 {/* ***************** */}
 
+                {/* <div>
+                    <button onClick={handleRegisterWithGoogle} className="google-link">Register with Google</button>
+                </div> */}
 
                 <div>
-                <h6 className="head2">Already have an account?</h6>
-                <Link to="/user-login" className="login-link">
-                    Login
-                </Link>
-
+                    <h6 className="head2">Already have an account?</h6>
+                    <Link to="/user-login" className="login-link">
+                        Login
+                    </Link>
                 </div>
               
 
             
-                {submitStatus && (
-                    <p className={submitStatus === 'success' ? 'success-message' : 'error-message'}>
-                        {submitStatus && (
-                        (() => {
-                            if (submitStatus === 'success') {
-                            window.alert('Thank you for registering!');
-                            } else {
-                            window.alert('Please try again!');
-                            }
-                        })()
-                        )}
-
+                
+                {alertMessage && (
+                    <p className="error-message">
+                        {alertMessage}
                     </p>
                 )}
 

@@ -1,11 +1,14 @@
 // src/components/Main/Main.js
 
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './Main.css';
-// import LandingForm from '../routes/Landing/LandingForm/LandingForm';
+
+// import OTPVerification from '../routes/Home/Login/OTPVerification';
 import Login from '../routes/Home/Login/Login';
 import Register from '../routes/Home/Register/Register';
-
+import ForgotPassword from '../routes/Home/ForgotPassword/ForgotPassword';
+import VerifyOtp from '../routes/Home/VerifyOtp/VerifyOtp';
 
 export default function Main(){
     return (
@@ -13,9 +16,10 @@ export default function Main(){
         <Router>
             <div>
                 <Routes>
-                {/* <Route path="/" element={<LandingForm />} /> */}
-                <Route path="/user-login" element={<Login />} /> 
-                <Route path="/user-register" element={<Register />} />
+                    <Route path="/user-login" element={<Login />} /> 
+                    <Route path="/user-register" element={<Register />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/verify-otp" element={<VerifyOtp />} />
                 </Routes>
             </div>
         </Router>

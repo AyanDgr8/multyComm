@@ -4,13 +4,12 @@ import React, { useState, useEffect } from 'react';
 import './Login.css' ;
 import axios from "axios";
 import { Link } from "react-router-dom";
+// import { sendPasswordReset  } from "../../../../Firebase";
 
-
-const Login = () => {
-    
-    const [submitStatus, setSubmitStatus] = useState(null);
+const Login = () => { 
+    const [alertMessage, setAlertMessage] = useState(null);
     const [formData, setFormData] = useState({
-        username:'',
+        usernameOrEmail: '',
         password: '',
     });
 
@@ -20,19 +19,30 @@ const Login = () => {
         setFormData({ ...formData, [name]: value });
     };
 
+    // const handleResetPassword = async () => {
+    //     try {
+    //         await sendPasswordReset(formData.usernameOrEmail); // Assuming the user enters either username or email for password reset
+    //         console.log('Password reset link sent successfully');
+    //         setAlertMessage('Password reset link sent to your email!');
+    //     } catch (error) {
+    //         console.error('Error sending password reset link:', error);
+    //         setAlertMessage('An error occurred while sending the password reset link. Please try again later.');
+    //     }
+    // };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
         // Validation checks
         if (!validateForm()) return;
-    
+        // Disable the submit button to prevent multiple submissions
+        e.target.querySelector('button[type="submit"]').disabled = true;
         // If validations pass, submit the form data
         const apiUrl = "https://multycomm-backend.onrender.com/user-login";
         try {
-            // Submit the form data
-            const response = await axios.post(apiUrl, formData); // Send formData directly
+            const response = await axios.post(apiUrl, formData); 
             console.log('Submission successful');
-            setSubmitStatus('success');
+            handleSubmissionSuccess();
+            setAlertMessage('Successfully logged in!');
             handleSubmissionSuccess(response.data);
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -40,65 +50,58 @@ const Login = () => {
         }
     };
 
-
     // Function to validate form inputs
     const validateForm = () => {
-        const { username,  password } = formData;
-        // Check if any required field is empty
-        if (!username || !password ) {
-            alert('Please fill in all the required fields');
+        const { usernameOrEmail, password } = formData;
+        if (!usernameOrEmail || !password ) {
+            setAlertMessage('Please fill in all the required fields');
             return false;
         }
-        // Validate password length
         if (password.length < 8) {
-            alert('Please enter a password with a minimum length of 8 characters');
+            setAlertMessage('Please enter a password with a minimum length of 8 characters');
             return false;
         }
-
-        // If all validations pass, return true
         return true;
     };
 
-    
-
     // Function to handle successful form submission
     const handleSubmissionSuccess = (data) => {
-        setSubmitStatus('success');
-        // Redirect or perform other actions based on the response data
+        // Redirect to desired URL after alert is dismissed
+        setTimeout(() => {
+            window.location.href = "https://testing.gamehigame.com/";
+        }, 500); 
     };
 
     // Function to handle form submission error
     const handleSubmissionError = (error) => {
-        console.log('Error object:', error);
         if (error.response && error.response.data && error.response.data.message) {
-            const errorMessage = error.response.data.message;
-            console.log('Error message:', errorMessage);
-            alert(errorMessage);
+            setAlertMessage(error.response.data.message);
         } else {
-            alert('An error occurred. Please try again later.');
+            setAlertMessage('An error occurred. Please try again later.');
         }
-        setSubmitStatus('error');
+        // Reset the form
+        resetForm();
     };
 
-
+    // Function to reset the form
     const resetForm = () => {
         setFormData({
-          username:'',
-          password: '',
+            usernameOrEmail: '',
+            password: '',
         });
-    }; 
+    };
 
     useEffect(() => {
-        if (submitStatus === 'success') {
-            const resetFormTimeout = setTimeout(() => {
-                setSubmitStatus(null);
-                resetForm();
-            }, 4000);
-            return () => clearTimeout(resetFormTimeout);
+        if (alertMessage) {
+            // Show alert
+            alert(alertMessage);
+            // Clear alert message
+            setAlertMessage(null);
         }
-    }, [submitStatus]);
+    }, [alertMessage]);
     
 
+    
     return(
         <div>
             <section className='above-form'>
@@ -127,69 +130,54 @@ const Login = () => {
                     <h3 className='form-line1'>Login</h3>                 
                 </div>
 
-                {/* ******** */}
-                <div class="row mb-4 mob">
-
-                  <div class="col">
-                      <div data-mdb-input-init class="form-outline">
-                          <input type="text" id="form6Example3" class="form-control inputs" 
-                              name="username" value={formData.username} onChange={handleChange}
-                              placeholder='Username'  required 
+                <div className="row mb-4 mob">
+                  <div className="col">
+                      <div data-mdb-input-init className="form-outline">
+                          <input 
+                              type="text" 
+                              id="form6Example3" 
+                              className="form-control inputs" 
+                              name="usernameOrEmail" 
+                              value={formData.usernameOrEmail} 
+                              onChange={handleChange}
+                              placeholder='Username or Email' 
+                              required 
                           />
-                        </div>
-                  </div>
-
-                  <div class="col">
-                    <div data-mdb-input-init class="form-outline">
-                      <input type="text" id="form6Example6" class="form-control inputs" 
-                        name="password" value={formData.password} onChange={handleChange}  
-                        placeholder='Password' required 
-                      />
                       </div>
                   </div>
-
+                  <div className="col">
+                      <div data-mdb-input-init className="form-outline">
+                          <input 
+                              type="text" 
+                              id="form6Example6" 
+                              className="form-control inputs" 
+                              name="password" 
+                              value={formData.password} 
+                              onChange={handleChange}  
+                              placeholder="Password" 
+                              required 
+                          />
+                      </div>
+                  </div>
                 </div>
-
-
                 
-                <button data-mdb-ripple-init type="submit" className="btn btn-primary btn-block mb-4 sbt-btn ">Submit</button>
+                <button data-mdb-ripple-init type="submit" className="btn btn-primary btn-block mb-4 sbt-btn ">Login</button>
                 
-                
-
-                {/* ***************** */}
-
+                <div>
+                    <Link  to="/forgot-password">
+                        <button  className='reset-link'>Forgot Password</button>
+                    </Link>
+                </div>
 
                 <div>
-                <h6 className="head2">Not a registered user?</h6>
-                <Link to="/user-register" className="register-link">
-                    Register
-                </Link>
-
+                    <h6 className="head2">Not a registered user?</h6>
+                    <Link to="/user-register" className="register-link">
+                        Register
+                    </Link>
                 </div>
-              
-
-            
-                {submitStatus && (
-                    <p className={submitStatus === 'success' ? 'success-message' : 'error-message'}>
-                        {submitStatus && (
-                        (() => {
-                            if (submitStatus === 'success') {
-                            window.alert('Successfully logged in!');
-                            } else {
-                            window.alert('Please try again!');
-                            }
-                        })()
-                        )}
-
-                    </p>
-                )}
-
-
             </form>
-
         </div>
-    )
-
+    );
 };
 
-export default Login;
+export default Login;  
