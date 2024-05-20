@@ -20,11 +20,6 @@ const ForgotPassword = () => {
             return;
         }
 
-        if (password.length < 6) {
-            setAlertMessage('Please enter a password with a minimum length of 6 characters');
-            return false;
-        }
-
         // Prevent multiple submissions
         if (isSending) return;
 
