@@ -56,8 +56,8 @@ const Login = () => {
             setAlertMessage('Please fill in all the required fields');
             return false;
         }
-        if (password.length < 8) {
-            setAlertMessage('Please enter a password with a minimum length of 8 characters');
+        if (password.length < 6) {
+            setAlertMessage('Please enter a password with a minimum length of 6 characters');
             return false;
         }
         return true;
@@ -163,7 +163,7 @@ const Login = () => {
                 <button data-mdb-ripple-init type="submit" className="btn btn-primary btn-block mb-4 sbt-btn ">Login</button>
                 
                 <div>
-                    <Link  to="/forgot-password">
+                    <Link to="/send-otp">
                         <button  className='reset-link'>Forgot Password</button>
                     </Link>
                 </div>

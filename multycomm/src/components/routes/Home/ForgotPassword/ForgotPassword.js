@@ -1,109 +1,103 @@
-// src/components/routes/Home/ForgotPassword/ForgotPassword.js
+// /src/components/routes/Home/ForgotPassword/ForgotPassword.js
 
-import React, { useState } from "react";
-import './ForgotPassword.css'; 
-import axios from "axios";
-import { Link } from "react-router-dom";
-import { sendPasswordReset } from "../../../../Firebase"; 
+
+import React, { useState } from 'react';
+import './ForgotPassword.css';
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
-  const [isSending, setIsSending] = useState(false); // State to track reset link sending process
+    const [email, setEmail] = useState("");
+    const [isSending, setIsSending] = useState(false);
+    const navigate = useNavigate();
 
-  const handleResetPassword = async () => {
-    if (!email.trim()) {
-      window.alert("Please fill in your email");
-      return;
-    }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    // Prevent multiple submission
-    if (isSending) return;
+        // Validate email format
+        if (!email.trim()) {
+            window.alert("Please fill in your email");
+            return;
+        }
 
-    try {
-      // Start the reset link sending process
-      setIsSending(true);
+        if (password.length < 6) {
+            setAlertMessage('Please enter a password with a minimum length of 6 characters');
+            return false;
+        }
 
-      // Check if the entered email exists in the database
-      const response = await axios.post('https://multycomm-backend.onrender.com/forgot-password', { email });
-  
-      if (response.data.exists) {
-        // If the email exists, send the password reset email
-        await sendPasswordReset(email);
-        window.alert("Password reset email sent successfully!");
+        // Prevent multiple submissions
+        if (isSending) return;
 
-        // Clear the email field
-        setEmail('');
-      } else {
-        // If the email does not exist, display an error message
-        window.alert("Email not found. Please enter a registered email.");
-      }
-    } catch (error) {
-      console.error("Error sending password reset email:", error);
-      window.alert(error.message);
-    } finally {
-      // End the reset link sending process
-      setIsSending(false);
-    }
-  };
-  
+        try {
+            // Start sending OTP process
+            setIsSending(true);
 
-  return (
-    <div>
-      <section className='above-form'>
-        <img 
-          src="/uploads/game-bg.png"
-          className='game-bg'
-          alt="game-bg"
-        />
-        <div className='form-header'>
-          <img 
-          src="/uploads/game-logo.png"
-          className='game-logo'
-          alt="game-logo"
-          />
-          <img 
-          src="/uploads/game-head.png"
-          className='game-head'
-          alt="game-head"
-          />
-        </div>
-      </section>
-      <div className="login-otp">
-        <div className='form-heading'>
-          <h3 className='form-line1'>Reset Password</h3>                 
-        </div>
-        <div className="login_box">
-          <div>
-            <input
-              type="text"
-              className="reset__textBox"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="E-mail"
-            />
-          </div>
-          
-          <button 
-            onClick={handleResetPassword} 
-            data-mdb-ripple-init 
-            type="submit" 
-            className="btn btn-primary btn-block mb-4 sbtt-btn"
-            disabled={isSending} // Disable button while sending
-          >
-            {isSending ? 'Sending...' : 'Send OTP'}
-          </button>
-          
-          <div>
-            Already a user?<Link to="/user-login" className="registerr-link">Login</Link> 
-          </div>
-          <div>
-            Don't have an account? <Link to="/user-register" className="registerr-link">Register</Link> 
-          </div>
-        </div>
-      </div>
+            // Send OTP request
+            const response = await axios.post('https://multycomm-backend.onrender.com/send-otp', { email });
 
-    </div>
-  );
+            /// Check if the email exists and OTP sending was successful
+            if (response.data.message === "Reset link sent successfully") {
+                window.alert('Reset Link sent successfully. Please check your email.');
+
+                // Redirect to login page after a delay
+                setTimeout(() => navigate('/user-login'), 2000);
+            } else {
+                // Display error message if OTP sending failed
+                window.alert('Failed to send link. Please try again.');
+            }
+        } catch (error) {
+            console.error("Error sending OTP:", error);
+            window.alert('An error occurred. Please try again.');
+        } finally {
+            // Reset sending state
+            setIsSending(false);
+        }
+    };
+
+    return(
+        <div>
+            <section className='above-form'>
+                <img 
+                    src="/uploads/game-bg.png"
+                    className='game-bg'
+                    alt="game-bg"
+                />
+                <div className='form-header'>
+                    <img 
+                    src="/uploads/game-logo.png"
+                    className='game-logo'
+                    alt="game-logo"
+                    />
+                    <img 
+                    src="/uploads/game-head.png"
+                    className='game-head'
+                    alt="game-head"
+                    />
+                </div>
+            </section>
+            <div className="change-otp">
+                <div className='form-heading'>
+                    <h3 className='form-line1'>Forgot Password</h3>                 
+                </div>
+                    <form onSubmit={handleSubmit}>
+                        <div className="forgot_box">
+                            <input
+                            type="email"
+                            placeholder="Enter Email"
+                            autoComplete="off"
+                            name="email"
+                            className="reset-textbox"
+                            onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
+                        <button type="submit" className="btn btn-primary btn-block mb-4 sbtt-btn">
+                            {isSending ? 'Sending...' : 'Send'}
+                        </button>
+                    </form>
+                </div>
+            </div>
+    )
 }
+
 
 export default ForgotPassword;

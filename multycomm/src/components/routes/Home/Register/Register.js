@@ -91,8 +91,8 @@ const Register = () => {
         }
 
         // Validate password length
-        if (password.length < 8) {
-            alert('Please enter a password with a minimum length of 8 characters');
+        if (password.length < 6) {
+            alert('Please enter a password with a minimum length of 6 characters');
             return false;
         }
 

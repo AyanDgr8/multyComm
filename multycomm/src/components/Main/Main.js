@@ -7,7 +7,11 @@ import './Main.css';
 import Login from '../routes/Home/Login/Login';
 import Register from '../routes/Home/Register/Register';
 import ForgotPassword from '../routes/Home/ForgotPassword/ForgotPassword';
-import UpdatePassword from '../routes/Home/UpdatePassword/UpdatePassword';
+import ResetPassword from '../routes/Home/ResetPassword/ResetPassword';
+
+
+// import UpdatePassword from '../routes/Home/UpdatePassword/UpdatePassword';
+// import OTPVerification from '../routes/Home/OTPVerificatio/OTPVerification';
 
 export default function Main(){
     return (
@@ -17,8 +21,8 @@ export default function Main(){
                 <Routes>
                     <Route path="/user-login" element={<Login />} /> 
                     <Route path="/user-register" element={<Register />} />
-                    <Route path="/forgot-password" element={<ForgotPassword />} />
-                    <Route path="/update-password" element={<UpdatePassword />} />
+                    <Route path="/send-otp" element={<ForgotPassword/>} />
+                    <Route path="/reset-password/:id/:token" element={<ResetPassword/>} />
                 </Routes>
             </div>
         </Router>

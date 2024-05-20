@@ -37,6 +37,7 @@ const firebaseConfig = {
   const app = initializeApp(firebaseConfig)
   const auth = getAuth(app)
   const db = getFirestore(app)
+//   const db = getDatabase();
   const googleProvider = new GoogleAuthProvider();
 
   const signInWithGoogle = async () =>{
