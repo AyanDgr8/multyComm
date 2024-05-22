@@ -33,8 +33,11 @@ const Login = () => {
         e.preventDefault();
         // Validation checks
         if (!validateForm()) return;
+
         // Disable the submit button to prevent multiple submissions
-        e.target.querySelector('button[type="submit"]').disabled = true;
+        const submitButton = e.target.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+
         // If validations pass, submit the form data
         const apiUrl = "https://multycomm-backend.onrender.com/user-login";
         try {
@@ -46,6 +49,8 @@ const Login = () => {
         } catch (error) {
             console.error('Error submitting form:', error);
             handleSubmissionError(error);
+            // Re-enable the submit button in case of an error
+            submitButton.disabled = false;
         }
     };
 
@@ -106,7 +111,7 @@ const Login = () => {
             <section className='above-form'>
               <img 
                 src="/uploads/game-bg.png"
-                className='game-bg'
+                className='game-bgg'
                 alt="game-bg"
               />
               <div className='form-header'>
@@ -147,7 +152,7 @@ const Login = () => {
                   <div className="col">
                       <div data-mdb-input-init className="form-outline">
                           <input 
-                              type="text" 
+                              type="password" 
                               id="form6Example6" 
                               className="form-control inputs" 
                               name="password" 

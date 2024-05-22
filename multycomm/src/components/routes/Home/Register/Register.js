@@ -9,7 +9,6 @@ import { registerWithEmailAndPassword  } from "../../../../Firebase";
 
 const Register = () => {
     const navigate = useNavigate(); 
-    
     const [alertMessage, setAlertMessage] = useState(null);
     const [formData, setFormData] = useState({
         username:'',
@@ -29,8 +28,8 @@ const Register = () => {
         if (!validateForm()) return;
 
         // Disable the submit button to prevent multiple submissions
-        e.target.querySelector('button[type="submit"]').disabled = true;
-    
+        const submitButton = e.target.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
 
         // If validations pass, submit the form data
         const apiUrl = "https://multycomm-backend.onrender.com/user-register";
@@ -51,6 +50,8 @@ const Register = () => {
         } catch (error) {
             console.error('Error submitting form:', error);
             handleSubmissionError(error);
+            // Re-enable the submit button in case of an error
+            submitButton.disabled = false;
         }
     };
 
@@ -69,12 +70,19 @@ const Register = () => {
     // Function to validate form inputs
     const validateForm = () => {
         const { username, firstName, lastName, email, password, phone, dob } = formData;
-        const phoneRegex = /^\d{10}$/;
+        const usernameRegex = /^(?![\W_]+$)[\w\s!@#$%^&*()-+=,.?/\\]*$/;
+        const phoneRegex = /^[6-9]\d{9}$/;
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         // Check if any required field is empty
         if (!username || !password || !firstName || !lastName || !phone || !email || !dob) {
             setAlertMessage('Please fill in all the required fields');
+            return false;
+        }
+
+        // Validate username format
+        if (!usernameRegex.test(username)) {
+            setAlertMessage('Username must contain at least one alphanumeric character');
             return false;
         }
 
@@ -90,11 +98,18 @@ const Register = () => {
             return false;
         }
 
+        // Validate username length
+        if (username.length > 10) {
+            alert('Please enter the username within a maximum length of 10 characters');
+            return false;
+        }
+
         // Validate password length
         if (password.length < 6) {
             alert('Please enter a password with a minimum length of 6 characters');
             return false;
         }
+
 
         // Validate date of birth
         const today = new Date();
@@ -125,12 +140,7 @@ const Register = () => {
     };
 
 
-
-    
-
     // Function to handle form submission error
-
-
     const handleSubmissionError = (error) => {
         if (error.response && error.response.data && error.response.data.message) {
             setAlertMessage(error.response.data.message); 
@@ -152,10 +162,6 @@ const Register = () => {
             dob: '',
         });
     };
-
-    
-
-
 
     // **************
     
@@ -243,7 +249,7 @@ const Register = () => {
 
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <input type="text" id="form6Example6" className="form-control inputs" 
+                      <input type="password" id="form6Example6" className="form-control inputs" 
                         name="password" value={formData.password} onChange={handleChange}  
                         placeholder='Password' required 
                       />

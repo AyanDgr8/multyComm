@@ -91,7 +91,7 @@ const ResetPassword = () => {
               />
             </div>
             <button type="submit" className="btn btn-primary btn-block mb-4 sbtt-btn" disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting...' : 'Submit'}
+              {isSubmitting ? 'Updating...' : 'Update'}
             </button>
           </form>
         </div>

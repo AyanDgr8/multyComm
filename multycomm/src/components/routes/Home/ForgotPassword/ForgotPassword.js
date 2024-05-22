@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import './ForgotPassword.css';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
@@ -33,7 +33,6 @@ const ForgotPassword = () => {
             /// Check if the email exists and OTP sending was successful
             if (response.data.message === "Reset link sent successfully") {
                 window.alert('Reset Link sent successfully. Please check your email.');
-
                 // Redirect to login page after a delay
                 setTimeout(() => navigate('/user-login'), 2000);
             } else {
@@ -42,7 +41,7 @@ const ForgotPassword = () => {
             }
         } catch (error) {
             console.error("Error sending OTP:", error);
-            window.alert('An error occurred. Please try again.');
+            window.alert('The email address you entered is not associated with an account.');
         } finally {
             // Reset sending state
             setIsSending(false);
@@ -54,7 +53,7 @@ const ForgotPassword = () => {
             <section className='above-form'>
                 <img 
                     src="/uploads/game-bg.png"
-                    className='game-bg'
+                    className='game-bgg'
                     alt="game-bg"
                 />
                 <div className='form-header'>
@@ -88,6 +87,15 @@ const ForgotPassword = () => {
                         <button type="submit" className="btn btn-primary btn-block mb-4 sbtt-btn">
                             {isSending ? 'Sending...' : 'Send'}
                         </button>
+
+
+                        <div>
+                            <h6 className="head2">Not a registered user?</h6>
+                            <Link to="/user-register" className="register-link">
+                                Register
+                            </Link>
+                        </div>
+                        
                     </form>
                 </div>
             </div>
