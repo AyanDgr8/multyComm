@@ -100,7 +100,7 @@ const Register = () => {
 
         // Validate username length
         if (username.length > 10) {
-            alert('Please enter the username within a maximum length of 10 characters');
+            alert('Username should be maximum of 10 characters');
             return false;
         }
 
