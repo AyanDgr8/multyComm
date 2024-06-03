@@ -9,6 +9,8 @@ import Register from '../routes/Home/Register/Register';
 import ForgotPassword from '../routes/Home/ForgotPassword/ForgotPassword';
 import ResetPassword from '../routes/Home/ResetPassword/ResetPassword';
 
+import Verification from '../routes/Home/Verification/Verification';
+import Payment from '../routes/Home/Payment/Payment';
 
 // import UpdatePassword from '../routes/Home/UpdatePassword/UpdatePassword';
 // import OTPVerification from '../routes/Home/OTPVerificatio/OTPVerification';
@@ -19,10 +21,14 @@ export default function Main(){
         <Router>
             <div>
                 <Routes>
+                    
                     <Route path="/user-login" element={<Login />} /> 
                     <Route path="/user-register" element={<Register />} />
                     <Route path="/send-otp" element={<ForgotPassword/>} />
                     <Route path="/reset-password/:id/:token" element={<ResetPassword/>} />
+                    <Route path="/verify-age" element={<Verification />} />
+                    <Route path="/payment" element={<Payment />} />
+
                 </Routes>
             </div>
         </Router>

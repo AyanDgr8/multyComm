@@ -1,4 +1,4 @@
-/* src/components/routes/Landing/Register/Register.css */
+/* src/components/routes/Home/Register/Register.css */
 
 
   .game-bg{
@@ -122,6 +122,20 @@
 .login-link:hover {
     color: white;
 }
+
+/* For Chrome, Safari, Edge, Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* For Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+
 
 /* for mobile screens */
 @media only screen and (max-width: 750px) {

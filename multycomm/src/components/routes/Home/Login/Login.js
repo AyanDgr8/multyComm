@@ -1,4 +1,4 @@
-// src/components/routes/Landing/Login/Login.js
+// src/components/routes/Home/Login/Login.js
 
 import React, { useState, useEffect } from 'react';
 import './Login.css' ;
@@ -18,16 +18,6 @@ const Login = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    // const handleResetPassword = async () => {
-    //     try {
-    //         await sendPasswordReset(formData.usernameOrEmail); // Assuming the user enters either username or email for password reset
-    //         console.log('Password reset link sent successfully');
-    //         setAlertMessage('Password reset link sent to your email!');
-    //     } catch (error) {
-    //         console.error('Error sending password reset link:', error);
-    //         setAlertMessage('An error occurred while sending the password reset link. Please try again later.');
-    //     }
-    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault();

@@ -1,25 +1,71 @@
 /* src/components/Main.css */
 
 body, html {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    width: 100%;
-  }
-  
-  
-  #root { 
-    overflow-x: hidden;
-  }
-  
-  .element-style{
-    overflow-x: hidden;
-  }
-    
-  .column{
-    overflow-x: hidden;
-  }
-  
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+  user-select: none;               /* Disable text selection */
+  -webkit-user-select: none;       /* Chrome/Safari/Opera */
+  -khtml-user-select: none;        /* Konqueror */
+  -moz-user-select: none;          /* Firefox */
+  -ms-user-select: none;           /* Internet Explorer/Edge */
+  -webkit-touch-callout: none;     /* iOS Safari */
+}
 
+#root { 
+  overflow-x: hidden;
+  user-select: none;               /* Disable text selection */
+  -webkit-user-select: none;       /* Chrome/Safari/Opera */
+  -khtml-user-select: none;        /* Konqueror */
+  -moz-user-select: none;          /* Firefox */
+  -ms-user-select: none;           /* Internet Explorer/Edge */
+  -webkit-touch-callout: none;     /* iOS Safari */
+}
+
+.element-style{
+  overflow-x: hidden;
+  user-select: none;               /* Disable text selection */
+  -webkit-user-select: none;       /* Chrome/Safari/Opera */
+  -khtml-user-select: none;        /* Konqueror */
+  -moz-user-select: none;          /* Firefox */
+  -ms-user-select: none;           /* Internet Explorer/Edge */
+  -webkit-touch-callout: none;     /* iOS Safari */
+}
   
-  
+.column{
+  overflow-x: hidden;
+  user-select: none;               /* Disable text selection */
+  -webkit-user-select: none;       /* Chrome/Safari/Opera */
+  -khtml-user-select: none;        /* Konqueror */
+  -moz-user-select: none;          /* Firefox */
+  -ms-user-select: none;           /* Internet Explorer/Edge */
+  -webkit-touch-callout: none;     /* iOS Safari */
+}
+
+/* Disable touch callout for all images */
+img {
+  -webkit-touch-callout: none;     /* iOS Safari */
+  pointer-events: none;            /* Disable interaction */
+}
+
+/* Prevent dragging of images */
+img {
+  -webkit-user-drag: none;         /* Disable dragging */
+  user-drag: none;
+}
+
+/* Additional styles to enhance user experience */
+body *::selection, 
+html *::selection, 
+#root *::selection, 
+.element-style *::selection, 
+.column *::selection {
+  background: none;
+  color: inherit; /* Retain original text color */
+  user-select: none; /* Disable text selection */
+  -webkit-user-select: none; /* Chrome/Safari/Opera */
+  -khtml-user-select: none; /* Konqueror */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+}

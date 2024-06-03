@@ -34,13 +34,13 @@ const Register = () => {
         // If validations pass, submit the form data
         const apiUrl = "https://multycomm-backend.onrender.com/user-register";
         try {
-            // Prepare request data
-            const requestData = {
-                ...formData
-            };
+            // // Prepare request data
+            // const requestData = {
+            //     ...formData
+            // };
 
             // Submit the form data
-            await axios.post(apiUrl, requestData);
+            await axios.post(apiUrl, formData);
             
             console.log('Registration successful');
             setAlertMessage('User registered successfully!');
@@ -140,7 +140,7 @@ const Register = () => {
     };
 
 
-    // Function to handle form submission error
+    // Function to handle form submission errors
     const handleSubmissionError = (error) => {
         if (error.response && error.response.data && error.response.data.message) {
             setAlertMessage(error.response.data.message); 
@@ -149,7 +149,7 @@ const Register = () => {
         }
     };
 
-    // Function to reset the form
+    // Function to reset form inputs
     const resetForm = () => {
         setFormData({
             username: '',
@@ -165,24 +165,22 @@ const Register = () => {
 
     // **************
     
-
+    // Function to handle form input changes
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
+
+    const handleDobBlur = (e) => {
+        const { value } = e.target;
+        const year = parseInt(value.split('-')[0], 10);
+        if (year > 9999) {
+            setAlertMessage('Check your Birth Year');
+            setFormData({ ...formData, dob: '' });
+        }
+    };
     
 
-    // const handleRegisterWithGoogle = async () => {
-    //     try {
-    //         await signInWithGoogle();
-    //         console.log('Registration with Google successful');
-    //         setAlertMessage('Registered successfully with Google!');
-    //         handleSubmissionSuccess();
-    //     } catch (error) {
-    //         console.error('Error registering with Google:', error);
-    //         setAlertMessage('An error occurred while registering with Google. Please try again later.');
-    //     }
-    // };
 
     useEffect(() => {
         if (alertMessage) {
@@ -325,6 +323,7 @@ const Register = () => {
                                 name="dob"
                                 value={formData.dob}
                                 onChange={handleChange}
+                                onBlur={handleDobBlur}
                                 placeholder="Date of Birth"
                                 required
                             />

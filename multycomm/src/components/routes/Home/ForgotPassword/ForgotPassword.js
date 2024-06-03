@@ -34,7 +34,7 @@ const ForgotPassword = () => {
             if (response.data.message === "Reset link sent successfully") {
                 window.alert('Reset Link sent successfully. Please check your email.');
                 // Redirect to login page after a delay
-                setTimeout(() => navigate('/user-login'), 2000);
+                setTimeout(() => navigate('/user-login'), 1000);
             } else {
                 // Display error message if OTP sending failed
                 window.alert('Failed to send link. Please try again.');

@@ -33,10 +33,6 @@ const ResetPassword = () => {
     try {
       setIsSubmitting(true);
 
-      // Send request to backend to update password
-      // await axios.post('https://multycomm-backend.onrender.com/verify-otp', { email, otp, newPassword });
-
-
       const response = await axios.post(`https://multycomm-backend.onrender.com/reset-password/${id}/${token}`, { newPassword });
 
       if (response.data.Status === 'Success') {
