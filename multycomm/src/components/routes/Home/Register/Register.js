@@ -198,18 +198,18 @@ const Register = () => {
         <div>
             <section className='above-form'>
               <img 
-                src="/uploads/game-bg.png"
+                src="/uploads/game-bg.webp"
                 className='game-bg'
                 alt="game-bg"
               />
               <div className='form-header'>
                 <img 
-                src="/uploads/game-logo.png"
+                src="/uploads/game-logo.webp"
                 className='game-logo'
                 alt="game-logo"
                 />
                 <img 
-                src="/uploads/game-head.png"
+                src="/uploads/game-head.webp"
                 className='game-head'
                 alt="game-head"
                 />
@@ -237,7 +237,7 @@ const Register = () => {
                       <div data-mdb-input-init className="form-outline">
                           <input type="text" id="form6Example3" className="form-control inputs" 
                               name="username" value={formData.username} onChange={handleChange}
-                              placeholder='Username'  required 
+                              placeholder='Username'  required autoComplete="username"
                           />
                           {/* <label class="form-label" for="form6Example3">Username</label> */}
                       </div>
@@ -249,7 +249,7 @@ const Register = () => {
                     <div data-mdb-input-init className="form-outline">
                       <input type="password" id="form6Example6" className="form-control inputs" 
                         name="password" value={formData.password} onChange={handleChange}  
-                        placeholder='Password' required 
+                        placeholder='Password' required autoComplete="new-password"
                       />
                       {/* <label class="form-label" for="form6Example6">Password</label> */}
                     </div>
@@ -265,7 +265,7 @@ const Register = () => {
                         <div data-mdb-input-init className="form-outline">
                             <input type="text" id="form6Example1" className="form-control inputs" 
                                 name="firstName" value={formData.firstName} onChange={handleChange}  
-                                placeholder='First Name' required 
+                                placeholder='First Name' required autoComplete="given-name"
                             />
                             {/* <label class="form-label" for="form6Example1">First name</label> */}
                         </div>
@@ -274,7 +274,7 @@ const Register = () => {
                         <div data-mdb-input-init className="form-outline">
                             <input type="text" id="form6Example2" className="form-control inputs" 
                                 name="lastName" value={formData.lastName} onChange={handleChange} 
-                                placeholder='Last Name' required
+                                placeholder='Last Name' required autoComplete="family-name"
                             />
                             {/* <label class="form-label" for="form6Example2">Last name</label> */}
                         </div>
@@ -290,7 +290,7 @@ const Register = () => {
                     <div data-mdb-input-init className="form-outline">
                       <input type="email" id="form6Example5" className="form-control inputs" 
                         name="email" value={formData.email} onChange={handleChange}
-                        placeholder='Email' required
+                        placeholder='Email' required autoComplete="email"
                       />
                       {/* <label class="form-label" for="form6Example5">Email</label> */}
                     </div>
@@ -301,7 +301,7 @@ const Register = () => {
                     <div data-mdb-input-init className="form-outline">
                         <input type="number" id="form6Example4" className="form-control inputs"     
                             name="phone" value={formData.phone} onChange={handleChange}
-                            placeholder='Phone' required 
+                            placeholder='Phone' required autoComplete="tel"
                         />
                         {/* <label class="form-label" for="form6Example4">Phone</label> */}
                     </div>
@@ -326,6 +326,7 @@ const Register = () => {
                                 onBlur={handleDobBlur}
                                 placeholder="Date of Birth"
                                 required
+                                autoComplete="bday"
                             />
                         </div>
                     </div>

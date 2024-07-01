@@ -68,10 +68,10 @@ const Verification = () => {
   return (
     <div>
       <section className='above-form'>
-        <img src="/uploads/game-bg.png" className='game-bgg' alt="game-bg" />
+        <img src="/uploads/game-bg.webp" className='game-bgg' alt="game-bg" />
         <div className='form-header'>
-          <img src="/uploads/game-logo.png" className='game-logo' alt="game-logo" />
-          <img src="/uploads/game-head.png" className='game-head' alt="game-head" />
+          <img src="/uploads/game-logo.webp" className='game-logo' alt="game-logo" />
+          <img src="/uploads/game-head.webp" className='game-head' alt="game-head" />
         </div>
       </section>
 

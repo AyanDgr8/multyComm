@@ -100,18 +100,18 @@ const Login = () => {
         <div>
             <section className='above-form'>
               <img 
-                src="/uploads/game-bg.png"
+                src="/uploads/game-bg.webp"
                 className='game-bgg'
                 alt="game-bg"
               />
               <div className='form-header'>
                 <img 
-                src="/uploads/game-logo.png"
+                src="/uploads/game-logo.webp"
                 className='game-logo'
                 alt="game-logo"
                 />
                 <img 
-                src="/uploads/game-head.png"
+                src="/uploads/game-head.webp"
                 className='game-head'
                 alt="game-head"
                 />
